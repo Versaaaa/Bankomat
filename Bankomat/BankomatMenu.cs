@@ -59,9 +59,9 @@ namespace Bankomat
                     return;
                 } // Exit System
 
-                MenuOptions(input, Conto);
             }
             while (!OperazioniConsentite.Contains(input));
+            MenuOptions(input, Conto);
             OperationMenu();
 
         }

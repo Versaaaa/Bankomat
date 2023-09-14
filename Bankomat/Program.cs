@@ -12,7 +12,7 @@ namespace Bankomat
 
         }
 
-        public static string UserLogin() 
+        public static dynamic UserLogin() 
         {
             string x = "";
             string y = "";
@@ -28,7 +28,7 @@ namespace Bankomat
                 {
                     if (AccountDataset.Login(x, y))
                     {
-                        return x;
+                        return AccountDataset.GetAccount(x,y);
                     }
                     else
                     {
@@ -49,7 +49,7 @@ namespace Bankomat
 
             foreach (var item in AccountDataset.accounts)
             {
-                res.Add(item.GetUser(), 1000);
+                res.Add(item, 1000);
             }
 
             return res;
