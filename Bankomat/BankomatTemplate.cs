@@ -17,7 +17,7 @@ namespace Bankomat
             }
             else
             {
-                throw new Exception("Desired quantity Exceed Target's Capacity");
+                throw new ArgumentException("Desired quantity Exceed Target's Capacity");
             }
         }
 

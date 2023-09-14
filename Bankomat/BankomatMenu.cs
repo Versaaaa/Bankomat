@@ -32,38 +32,45 @@ namespace Bankomat
 
         public void OperationMenu()
         {
-            OperazioniBankomat input;
-            do
+            while (true)
             {
-                Console.Clear();
-
-                Console.WriteLine($"{(int)OperazioniBankomat.Esci} - {OperazioniBankomat.Esci}");
-                foreach (var item in OperazioniConsentite.OrderBy(x => x))
+                OperazioniBankomat input;
+                do
                 {
-                    Console.WriteLine($"{(int)item} - {item}");
-                }
-                Console.WriteLine("----------------------------------------------------\nInserisci indice Comando");
+                    Console.Clear();
+
+                    Console.WriteLine($"{(int)OperazioniBankomat.Esci} - {OperazioniBankomat.Esci}");
+                    foreach (var item in OperazioniConsentite.OrderBy(x => x))
+                    {
+                        Console.WriteLine($"{(int)item} - {item}");
+                    }
+                    Console.WriteLine("----------------------------------------------------\nInserisci indice Comando");
                  
-                try
-                {
-                    input = (OperazioniBankomat)int.Parse(Console.ReadLine());
-                }
-                catch
-                {
-                    input = (OperazioniBankomat)(-1);
-                } //input = readline
+                    try
+                    {
+                        input = (OperazioniBankomat)int.Parse(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        input = (OperazioniBankomat)(-1);
+                    } //input = readline
 
-                if (input == OperazioniBankomat.Esci) 
-                {
-                    Console.WriteLine("Chiusura del OperationMenu Bankomat");
-                    return;
-                } // Exit System
+                    if (input == OperazioniBankomat.Esci) 
+                    {
+                        Console.WriteLine("Chiusura del OperationMenu Bankomat");
+                        return;
+                    } // Exit System
+
+                }
+                while (!OperazioniConsentite.Contains(input));
+                MenuOptions(input, Conto);
 
             }
-            while (!OperazioniConsentite.Contains(input));
-            MenuOptions(input, Conto);
-            OperationMenu();
+        }
 
+        void ConsoleWriteSaldo(dynamic contoCorrente)
+        {
+            Console.WriteLine($"Saldo disponibile : {Bankomat.Saldo(contoCorrente)}       {DateTime.UtcNow}");
         }
 
         public void MenuOptions(OperazioniBankomat input, dynamic contoCorrente)
@@ -73,7 +80,7 @@ namespace Bankomat
             {
                 case OperazioniBankomat.Saldo:
                     {
-                        Console.WriteLine($"Saldo disponibile : {Bankomat.Saldo(contoCorrente)}       {DateTime.UtcNow}");
+                        ConsoleWriteSaldo(contoCorrente);
                         Console.ReadKey();
                         break;
                     }
@@ -86,7 +93,7 @@ namespace Bankomat
                             var importo = double.Parse(Console.ReadLine());
                             Bankomat.Versamento(contoCorrente,importo);
                             Console.WriteLine("Versamento Effettuato con Successo");
-                            MenuOptions(OperazioniBankomat.Saldo, contoCorrente);
+                            ConsoleWriteSaldo(contoCorrente);
                             Console.ReadKey();
                         }
                         catch (System.FormatException)
@@ -108,7 +115,7 @@ namespace Bankomat
                             var importo = double.Parse(Console.ReadLine());
                             Bankomat.Prelievo(contoCorrente,importo);
                             Console.WriteLine("Prelievo Effettuato con Successo");
-                            MenuOptions(OperazioniBankomat.Saldo, contoCorrente);
+                            ConsoleWriteSaldo(contoCorrente);
                             Console.ReadKey();
 
                         }
@@ -120,7 +127,7 @@ namespace Bankomat
                         {
                             ConsoleUtilities.WriteError("Importo Valore negativo non accettato");
                         }
-                        catch
+                        catch (ArgumentException)
                         { 
                             ConsoleUtilities.WriteError("Importo inserito supera Deposio attuale");
                         }
